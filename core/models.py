@@ -26,8 +26,8 @@ class CustomUserManager(BaseUserManager):
 
 class Profile(AbstractBaseUser):
     username = models.CharField(max_length=255, unique=True)
-    email = models.EmailField("email address", unique=True)
     first_name = models.CharField(max_length=255, verbose_name='Имя')
+    email = models.EmailField("email address", unique=True)
     last_name = models.CharField(max_length=255, verbose_name='Фамилия')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -39,7 +39,7 @@ class Profile(AbstractBaseUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.username
 
     def has_perm(self, perm, obj=None):
         return True
