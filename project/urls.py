@@ -20,4 +20,6 @@ from core.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('profile-list/', ProfileListCreateView, name='profile-list/'),
+    path('profile-detail/<int:pk>/', ProfileDetailCreateView, name='profile-detail/')
 ]
