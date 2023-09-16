@@ -24,4 +24,6 @@ urlpatterns = [
     path('profile-detail/<int:pk>/', ProfileDetailCreateView, name='profile-detail/'),
     path('profiles/', ProfileListCreateAPIView.as_view(),name='profiles'),
     path('profiles/<int:pk>/', ProfileDetailAPIView.as_view(),name='profile'),
+    path('sections/', ChildrenSectionListCreateAPIView.as_view(),name='sections'),
+    path('sections/<int:pk>/', ChildrenSectionDetailAPIView.as_view(),name='section'),
 ]
