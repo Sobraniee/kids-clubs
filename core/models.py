@@ -47,7 +47,7 @@ class Profile(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-class ProfileKid(models.Model):
+class ProfileKid(Profile):
     kid_name = models.CharField(max_length=100, verbose_name='Имя ребенка')
     profile = models.ForeignKey(Profile, related_name='дети', on_delete=models.CASCADE)
 
