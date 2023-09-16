@@ -179,3 +179,30 @@ class CommmentDetailAPIView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Comment.DoesNotExist:
             return Response({'error': 'Страница не найдено'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class TrainerListCreateAPIView(APIView):
+    def get(self, request):
+        trainers = Trainer.objects.all()
+        serializer = TrainerSerializer(
+            instance=trainers,
+            many=True
+        )
+        data = serializer.data
+        return Response(data)
+
+    def post(self, request):
+        serializer = TrainerSerializer(data=request.data)
+        if serializer.is_valid():
+            new_trainer = serializer.save()
+            new_serializer = TrainerSerializer(instance=new_trainer)
+            return Response(new_serializer.data, 201)
+
+        return Response(serializer.errors, 400)
+
+class TrainerDetailAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        id = kwargs["pk"]
+        trainer = Trainer.objects.get(id=id)
+        serializer = TrainerSerializer(instance=trainer)
+        return Response(serializer.data)
