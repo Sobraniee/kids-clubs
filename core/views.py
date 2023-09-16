@@ -2,15 +2,11 @@ from django.views import View
 from django.shortcuts import render, redirect
 from django.http import Http404
 from rest_framework.response import Response
-from rest_framework import generics
-from core.models import *
 from rest_framework.views import APIView
 from .serializers import *
-
-class GetDataView(View):
-
-    def get(self, request):
-        return render(request)
+from django.http import JsonResponse
+from .models import Comment
+from rest_framework import status
 
 class CustomUserManagerView(View):
     def register(request):
@@ -22,6 +18,7 @@ class CustomUserManagerView(View):
         else:
             CustomUserManager()
         return request
+
 
 class ProfileListCreateView(View):
     def get(self, request):
@@ -90,3 +87,95 @@ class ChildrenSectionDetailAPIView(APIView):
         section = ChildrenSection.objects.get(id=id)
         serializer = ChildrenSectionSerializer(instance=section)
         return Response(serializer.data)
+
+class ProfileKidListView(APIView):
+    def get(self, request):
+        profilekids = ProfileKid.objects.all()
+        serializer = ProfileKidSerializer(
+            instance=profilekids,
+            many=True
+        )
+        data = serializer.data
+        return Response(data)
+    def post(self, request):
+        serializer = ProfileKidSerializer(data=request.data)
+        if serializer.is_valid():
+            new_profilekid = serializer.save()
+            new_serializer = ProfileKidSerializer(instance=new_profilekid)
+            return Response(new_serializer.data, 201)
+
+        return Response(serializer.errors, 400)
+
+class CommentListAPIView(APIView):
+    def get(self, request):
+        comment = Comment.objects.all()
+        serializer = CommentSerializer(
+            instance=comment,
+            many=True
+        )
+        data = serializer.data
+        return Response(data)
+
+    def post(self, request):
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            new_comment = serializer.save()
+            new_serializer = CommentSerializer(instance=new_comment)
+            return Response(new_serializer.data, 201)
+
+        return Response(serializer.errors, 400)
+
+class TrainerListView(APIView):
+    def get(self, request):
+        trainer = Trainer.objects.all()
+        serializer = TrainerSerializer(
+            instance=trainer,
+            many=True
+        )
+        data = serializer.data
+        return Response(data)
+    def post(self, request):
+        serializer = TrainerSerializer(data=request.data)
+        if serializer.is_valid():
+            new_trainers = serializer.save()
+            new_serializer = TrainerSerializer(instance=new_trainers)
+            return Response(new_serializer.data, 201)
+
+        return Response(serializer.errors, 400)
+
+class ProfileKidDetailAPIView(APIView):
+   def get(self, request, pk):
+    try:
+        profile_kid = ProfileKid.objects.get(pk=pk)
+        data = {
+            'kid_name': profile_kid.kid_name,
+            'parent_profile': str(profile_kid.profile),
+        }
+        return JsonResponse(data)
+    except ProfileKid.DoesNotExist:
+        return JsonResponse({'error': 'Страница не найдено'}, status=404)
+
+class CommmentDetailAPIView(APIView):
+    def get(self, request, pk):
+        try:
+            comment = Comment.objects.get(pk=pk)
+            serializer = CommentSerializer(comment)
+            return Response(serializer.data)
+        except Comment.DoesNotExist:
+            return Response({'error': 'Страница не найдено'}, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, pk):
+        comment = Comment.objects.get(pk=pk)
+        serializer = CommentSerializer(comment, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            comment = Comment.objects.get(pk=pk)
+            comment.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Comment.DoesNotExist:
+            return Response({'error': 'Страница не найдено'}, status=status.HTTP_404_NOT_FOUND)

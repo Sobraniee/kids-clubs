@@ -25,3 +25,8 @@ class TrainerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trainer
         fields = '__all__'
+
+class ProfileKidSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfileKid
+        fields = '__all__'
