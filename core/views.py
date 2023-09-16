@@ -4,6 +4,7 @@ from django.http import Http404
 from rest_framework.response import Response
 from rest_framework import generics
 from core.models import *
+from rest_framework.views import APIView
 from .serializers import *
 
 class ProfileListCreateView(View):
@@ -22,4 +23,34 @@ class ProfileDetailCreateView(View):
         else:  # Add an else block
             context = {'profile': profile}
             return render(request, 'profile_detail.html', context)
+
+
+class ProfileListCreateAPIView(APIView):
+    def get(self, request):
+        profiles = Profile.objects.all()
+        serializer = ProfileSerializer(
+            instance=profiles,
+            many=True
+        )
+        data = serializer.data
+        return Response(data)
+
+    def post(self, request):
+        serializer = ProfileSerializer(data=request.data)
+        if serializer.is_valid():
+            new_profile = serializer.save()
+            new_serializer = ProfileSerializer(instance=new_profile)
+            return Response(new_serializer.data, 201)
+
+        return Response(serializer.errors, 400)
+
+
+class ProfileDetailAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        id = kwargs["pk"]
+        report = Profile.objects.get(id=id)
+        serializer = ProfileSerializer(instance=report)
+        return Response(serializer.data)
+
+
 
