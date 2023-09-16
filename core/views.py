@@ -53,4 +53,32 @@ class ProfileDetailAPIView(APIView):
         return Response(serializer.data)
 
 
+class ChildrenSectionListCreateAPIView(APIView):
+    def get(self, request):
+        sections = ChildrenSection.objects.all()
+        serializer = ChildrenSectionSerializer(
+            instance=sections,
+            many=True
+        )
+        data = serializer.data
+        return Response(data)
+
+    def post(self, request):
+        serializer = ChildrenSectionSerializer(data=request.data)
+        if serializer.is_valid():
+            new_section = serializer.save()
+            new_serializer = ChildrenSectionSerializer(instance=new_section)
+            return Response(new_serializer.data, 201)
+
+        return Response(serializer.errors, 400)
+
+
+class ChildrenSectionDetailAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        id = kwargs["pk"]
+        section = ChildrenSection.objects.get(id=id)
+        serializer = ChildrenSectionSerializer(instance=section)
+        return Response(serializer.data)
+
+
 
