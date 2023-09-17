@@ -77,6 +77,6 @@ class ChildrenSection(models.Model):
     record = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.name_club} ({self.trainer.trainer_name} {self.trainer.trainer_last_name})"
+        return f"{self.name_club} ({self.trainers.trainer_name} {self.trainers.trainer_last_name})"
 
 
