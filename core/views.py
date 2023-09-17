@@ -199,10 +199,3 @@ class TrainerListCreateAPIView(APIView):
             return Response(new_serializer.data, 201)
 
         return Response(serializer.errors, 400)
-
-class TrainerDetailAPIView(APIView):
-    def get(self, request, *args, **kwargs):
-        id = kwargs["pk"]
-        trainer = Trainer.objects.get(id=id)
-        serializer = TrainerSerializer(instance=trainer)
-        return Response(serializer.data)

@@ -78,6 +78,3 @@ class Trainer(models.Model):
     trainer_name = models.CharField(max_length=100)
     trainer_last_name = models.CharField(max_length=100)
     trainer_description = models.CharField(max_length=200)
-
-    def __str__(self):
-        return f'{self.trainer_name} {self.trainer_last_name}'
