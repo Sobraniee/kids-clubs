@@ -13,5 +13,5 @@ urlpatterns = [
     path('comments/', CommentListAPIView.as_view(), name='comments'),
     path('api/comments/<int:pk>/', CommmentDetailAPIView.as_view(), name='comment-detail-api'),
     path('trainers/', TrainerListCreateAPIView.as_view(), name='trainers'),
-
+    path('trainers/<int:pk>/', TrainerDetailAPIView.as_view(), name='trainer'),
 ]

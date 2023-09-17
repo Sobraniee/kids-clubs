@@ -7,6 +7,8 @@ from .serializers import *
 from django.http import JsonResponse
 from .models import Comment
 from rest_framework import status
+from django.shortcuts import get_object_or_404
+from rest_framework import generics
 
 class CustomUserManagerView(View):
     def register(request):
@@ -134,6 +136,7 @@ class TrainerListView(APIView):
         )
         data = serializer.data
         return Response(data)
+
     def post(self, request):
         serializer = TrainerSerializer(data=request.data)
         if serializer.is_valid():
@@ -142,6 +145,32 @@ class TrainerListView(APIView):
             return Response(new_serializer.data, 201)
 
         return Response(serializer.errors, 400)
+
+class TrainerListCreateAPIView(APIView):
+    def get(self, request):
+        trainers = Trainer.objects.all()
+        serializer = TrainerSerializer(
+            instance=trainers,
+            many=True
+        )
+        data = serializer.data
+        return Response(data)
+
+    def post(self, request):
+        serializer = TrainerSerializer(data=request.data)
+        if serializer.is_valid():
+            new_trainer = serializer.save()
+            new_serializer = TrainerSerializer(instance=new_trainer)
+            return Response(new_serializer.data, 201)
+
+        return Response(serializer.errors, 400)
+
+class TrainerDetailAPIView(generics.RetrieveAPIView):
+    queryset = Trainer.objects.all()
+    serializer_class = TrainerSerializer
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return get_object_or_404(self.queryset, pk=pk)
 
 class ProfileKidDetailAPIView(APIView):
    def get(self, request, pk):
@@ -180,22 +209,3 @@ class CommmentDetailAPIView(APIView):
         except Comment.DoesNotExist:
             return Response({'error': 'Страница не найдено'}, status=status.HTTP_404_NOT_FOUND)
 
-
-class TrainerListCreateAPIView(APIView):
-    def get(self, request):
-        trainers = Trainer.objects.all()
-        serializer = TrainerSerializer(
-            instance=trainers,
-            many=True
-        )
-        data = serializer.data
-        return Response(data)
-
-    def post(self, request):
-        serializer = TrainerSerializer(data=request.data)
-        if serializer.is_valid():
-            new_trainer = serializer.save()
-            new_serializer = TrainerSerializer(instance=new_trainer)
-            return Response(new_serializer.data, 201)
-
-        return Response(serializer.errors, 400)

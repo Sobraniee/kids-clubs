@@ -59,22 +59,24 @@ class Comment(models.Model):
     text = models.CharField(max_length=500)
     children_section = models.ForeignKey('ChildrenSection', on_delete=models.CASCADE)
 
-class ChildrenSection(models.Model):
-    clubs_kinds_CHOICES = [
-        ('развитие', 'Развитие'),
-        ('спорт', 'Спорт'),
-        ('искусство', 'Искусство'),
-    ]
-    rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(1, 6)])
-    name_club = models.CharField(max_length=100)
-    trainer = models.ManyToManyField('Trainer', related_name='секции')
-    description = models.TextField()
-    club_kinds = models.CharField(max_length=20, choices=clubs_kinds_CHOICES)
-    record = models.BooleanField(default=False)
-    def __str__(self):
-        return self.name_club
 
 class Trainer(models.Model):
     trainer_name = models.CharField(max_length=100)
     trainer_last_name = models.CharField(max_length=100)
     trainer_description = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f"{self.trainer_name} {self.trainer_last_name}"
+
+class ChildrenSection(models.Model):
+    rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(1, 6)])
+    name_club = models.CharField(max_length=100)
+    trainers = models.ForeignKey(Trainer, on_delete=models.CASCADE, related_name='sections')
+    description = models.TextField()
+    club_kinds = models.CharField(max_length=20)
+    record = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.name_club} ({self.trainer.trainer_name} {self.trainer.trainer_last_name})"
+
+
