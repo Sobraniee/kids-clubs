@@ -90,6 +90,14 @@ class ChildrenSectionDetailAPIView(APIView):
         serializer = ChildrenSectionSerializer(instance=section)
         return Response(serializer.data)
 
+    def post(self, request, *args, **kwargs):
+        serializer = ChildrenSectionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class ProfileKidListView(APIView):
     def get(self, request):
         profilekids = ProfileKid.objects.all()
@@ -99,6 +107,7 @@ class ProfileKidListView(APIView):
         )
         data = serializer.data
         return Response(data)
+
     def post(self, request):
         serializer = ProfileKidSerializer(data=request.data)
         if serializer.is_valid():

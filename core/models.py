@@ -68,6 +68,7 @@ class Trainer(models.Model):
     def __str__(self):
         return f"{self.trainer_name} {self.trainer_last_name}"
 
+
 class ChildrenSection(models.Model):
     rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(1, 6)])
     name_club = models.CharField(max_length=100)

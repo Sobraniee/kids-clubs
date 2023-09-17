@@ -27,11 +27,11 @@ class TrainerSerializer(serializers.ModelSerializer):
 
 
 class ChildrenSectionSerializer(serializers.ModelSerializer):
-    trainers = TrainerSerializer()
+    trainers = TrainerSerializer(many=True, read_only=True)
 
     class Meta:
         model = ChildrenSection
-        fields = '__all__'
+        fields = ('id', 'name_club', 'description', 'trainers')
 
 class ProfileKidSerializer(serializers.ModelSerializer):
     class Meta:
