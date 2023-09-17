@@ -1,37 +1,25 @@
 from rest_framework import serializers
-from core.models import *
+from .models import Profile, ProfileKid, Comment, Trainer, ChildrenSection
 
-
-class CustomUserManagerSerializer(serializers.ModelSerializer):
+class TrainerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomUserManager
+        model = Trainer
         fields = '__all__'
 
-
-class ProfileSerializer(serializers.ModelSerializer):
+class ChildrenSectionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
-        fields = ('id', 'username', 'first_name', 'last_name', 'email')
-
+        model = ChildrenSection
+        fields = '__all__'
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
 
-
-class TrainerSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Trainer
-        fields = ('trainer_name', 'trainer_last_name', 'trainer_description')
-
-
-class ChildrenSectionSerializer(serializers.ModelSerializer):
-    trainers = TrainerSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = ChildrenSection
-        fields = ('id', 'name_club', 'description', 'trainers')
+        model = Profile
+        fields = '__all__'
 
 class ProfileKidSerializer(serializers.ModelSerializer):
     class Meta:

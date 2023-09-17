@@ -1,17 +1,35 @@
 from django.urls import path
-from .views import *
+from .views import (
+    ProfileListCreateView,
+    ProfileRetrieveUpdateDestroyView,
+    ProfileKidListCreateView,
+    ProfileKidRetrieveUpdateDestroyView,
+    CommentListCreateView,
+    CommentRetrieveUpdateDestroyView,
+    TrainerListCreateView,
+    TrainerRetrieveUpdateDestroyView,
+    ChildrenSectionListCreateView,
+    ChildrenSectionRetrieveUpdateDestroyView,
+)
+
 urlpatterns = [
-    path('register/', CustomUserManagerView.as_view(), name='register'),
-    path('profile-list/', ProfileListCreateView.as_view(), name='profile-list'),
-    path('profile-detail/<int:pk>/', ProfileDetailCreateView.as_view(), name='profile-detail'),
-    path('profiles/', ProfileListCreateAPIView.as_view(), name='profiles'),
-    path('profiles/<int:pk>/', ProfileDetailAPIView.as_view(), name='profile'),
-    path('sections/', ChildrenSectionListCreateAPIView.as_view(), name='sections'),
-    path('sections/<int:pk>/', ChildrenSectionDetailAPIView.as_view(), name='section'),
-    path('profile-kids/', ProfileKidListView.as_view(), name='profile-kids'),
-    path('profile-kids/<int:pk/', ProfileKidDetailAPIView.as_view(), name='profile-kid-detail-api'),
-    path('comments/', CommentListAPIView.as_view(), name='comments'),
-    path('api/comments/<int:pk>/', CommmentDetailAPIView.as_view(), name='comment-detail-api'),
-    path('trainers/', TrainerListCreateAPIView.as_view(), name='trainers'),
-    path('trainers/<int:pk>/', TrainerDetailAPIView.as_view(), name='trainer'),
+    # Маршруты для профилей
+    path('profiles/', ProfileListCreateView.as_view(), name='profile-list'),
+    path('profiles/<int:pk>/', ProfileRetrieveUpdateDestroyView.as_view(), name='profile-detail'),
+
+    # Маршруты для профилей детей
+    path('profile-kids/', ProfileKidListCreateView.as_view(), name='profile-kid-list'),
+    path('profile-kids/<int:pk>/', ProfileKidRetrieveUpdateDestroyView.as_view(), name='profile-kid-detail'),
+
+    # Маршруты для комментариев
+    path('comments/', CommentListCreateView.as_view(), name='comment-list'),
+    path('comments/<int:pk>/', CommentRetrieveUpdateDestroyView.as_view(), name='comment-detail'),
+
+    # Маршруты для тренеров
+    path('trainers/', TrainerListCreateView.as_view(), name='trainer-list'),
+    path('trainers/<int:pk>/', TrainerRetrieveUpdateDestroyView.as_view(), name='trainer-detail'),
+
+    # Маршруты для секций для детей
+    path('children-sections/', ChildrenSectionListCreateView.as_view(), name='children-section-list'),
+    path('children-sections/<int:pk>/', ChildrenSectionRetrieveUpdateDestroyView.as_view(), name='children-section-detail'),
 ]
