@@ -33,8 +33,8 @@ class Profile(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ['username']
 
     objects = CustomUserManager()
 
@@ -77,6 +77,10 @@ class ChildrenSection(models.Model):
     club_kinds = models.CharField(max_length=20)
     record = models.BooleanField(default=False)
 
+    # def filter_by_club_kinds(club_kinds_value):
+    #     filtered_sections = ChildrenSection.objects.filter(club_kinds=club_kinds_value)
+    #     serializer = ChildrenSectionSerializer(filtered_sections, many=True)
+    #     return ({'filtered_sections': serializer.data})
     def __str__(self):
         return f"{self.name_club} ({self.trainers.trainer_name} {self.trainers.trainer_last_name})"
 

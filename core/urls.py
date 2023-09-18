@@ -10,6 +10,7 @@ from .views import (
     TrainerRetrieveUpdateDestroyView,
     ChildrenSectionListCreateView,
     ChildrenSectionRetrieveUpdateDestroyView,
+    filtered_sections_view,
 )
 
 urlpatterns = [
@@ -32,4 +33,5 @@ urlpatterns = [
     # Маршруты для секций для детей
     path('children-sections/', ChildrenSectionListCreateView.as_view(), name='children-section-list'),
     path('children-sections/<int:pk>/', ChildrenSectionRetrieveUpdateDestroyView.as_view(), name='children-section-detail'),
+    path('filtered_sections/<str:club_kinds_value>/', filtered_sections_view, name='filtered_sections'),
 ]

@@ -48,6 +48,16 @@ class ChildrenSectionListCreateView(generics.ListCreateAPIView):
     queryset = ChildrenSection.objects.all()
     serializer_class = ChildrenSectionSerializer
 
+
+def filtered_sections_view(request, club_kinds_value):
+    try:
+        filtered_sections = ChildrenSection.objects.filter(club_kinds=club_kinds_value)
+        serializer = ChildrenSectionSerializer(filtered_sections, many=True)
+        return ({'filtered_sections': serializer.data})
+    except ChildrenSection.DoesNotExist:
+        return ({'error': 'Секции не найдены'})
+
+# filtered_sections = ChildrenSection("sport")
 # Представление для обновления, удаления и просмотра отдельной секции для детей
 class ChildrenSectionRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ChildrenSection.objects.all()
