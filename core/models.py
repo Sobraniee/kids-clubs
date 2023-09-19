@@ -70,11 +70,17 @@ class Trainer(models.Model):
 
 
 class ChildrenSection(models.Model):
+    CLUB_KINDS_CHOICES = [
+        ('1', 'спорт'),
+        ('2', 'развитие'),
+        ('3', 'искусство')
+        # Добавьте другие варианты по вашему усмотрению
+    ]
     rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(1, 6)])
     name_club = models.CharField(max_length=100)
     trainers = models.ForeignKey(Trainer, on_delete=models.CASCADE, related_name='sections')
     description = models.TextField()
-    club_kinds = models.CharField(max_length=20)
+    club_kinds = models.CharField(max_length=20, choices=CLUB_KINDS_CHOICES)
     record = models.BooleanField(default=False)
 
     # def filter_by_club_kinds(club_kinds_value):

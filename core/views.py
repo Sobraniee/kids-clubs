@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework import generics
 
 from .models import Profile, ProfileKid, Comment, Trainer, ChildrenSection
@@ -53,7 +54,7 @@ def filtered_sections_view(request, club_kinds_value):
     try:
         filtered_sections = ChildrenSection.objects.filter(club_kinds=club_kinds_value)
         serializer = ChildrenSectionSerializer(filtered_sections, many=True)
-        return ({'filtered_sections': serializer.data})
+        return JsonResponse({'filtered_sections': serializer.data})
     except ChildrenSection.DoesNotExist:
         return ({'error': 'Секции не найдены'})
 
